@@ -1,14 +1,14 @@
 import React from "react";
 
 
-function SettingsPage(){
+function Header(){
     return(
         <>
         <div>
-            Settings Page
+            Header
         </div>
         </>
     )
 }
 
-export default SettingsPage
+export default Header

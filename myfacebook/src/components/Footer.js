@@ -1,14 +1,13 @@
 import React from "react";
 
 
-function SettingsPage(){
+function Footer(){
     return(
         <>
         <div>
-            Settings Page
+            Footer
         </div>
         </>
     )
 }
-
-export default SettingsPage
+export default Footer
