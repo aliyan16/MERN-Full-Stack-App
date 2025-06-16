@@ -5,6 +5,8 @@ import SigninPage from "./pages/Signin";
 import RegistrationPage from "./pages/Registraion";
 import SettingsPage from "./pages/settings";
 import Header from "./components/Header";
+import LeftSideBar from './components/LeftsideBar';
+import RightSideBar from './components/RightsideBar';
 function App() {
   return (
     <>
