@@ -8,6 +8,8 @@ import Header from "./components/Header";
 import LeftSideBar from './components/LeftsideBar';
 import RightSideBar from './components/RightsideBar';
 import ReelsPage from "./pages/Reels";
+import FriendsPage from "./pages/friends";
+import NotificationPage from "./pages/notification";
 function App() {
   return (
     <>
@@ -24,6 +26,8 @@ function App() {
               <Route path="/profile" element={<ProfilePage/>} />
               <Route path="/setting" element={<SettingsPage/>} />
               <Route path="/reels" element={<ReelsPage/>} />
+              <Route path="/friends" element={<FriendsPage/>} />
+              <Route path="/notification" element={<NotificationPage/>} />
             </Routes>
           </div>
           <RightSideBar/>
