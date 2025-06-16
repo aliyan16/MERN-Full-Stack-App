@@ -11,14 +11,22 @@ function App() {
   return (
     <>
     <Router>
-      <Header/>
-      <Routes>
-        <Route path="/" element={<SigninPage/>} />
-        <Route path="/home" element={<HomePage/>} />
-        <Route path="/registration" element={<RegistrationPage/>} />
-        <Route path="/profile" element={<ProfilePage/>} />
-        <Route path="/setting" element={<SettingsPage/>} />
-      </Routes>
+      <div className="flex flex-col h-screen">
+        <Header/>
+        <div className="flex flex-1 overflow-hidden">
+          <LeftSideBar/>
+          <div className="flex-1 overflow-y-auto bg-gray-100 p-4">
+            <Routes>
+              <Route path="/" element={<SigninPage/>} />
+              <Route path="/home" element={<HomePage/>} />
+              <Route path="/registration" element={<RegistrationPage/>} />
+              <Route path="/profile" element={<ProfilePage/>} />
+              <Route path="/setting" element={<SettingsPage/>} />
+            </Routes>
+          </div>
+          <RightSideBar/>
+        </div>
+      </div>
     </Router>
     </>
   );
