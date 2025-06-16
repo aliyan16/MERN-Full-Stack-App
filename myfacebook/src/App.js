@@ -7,6 +7,7 @@ import SettingsPage from "./pages/settings";
 import Header from "./components/Header";
 import LeftSideBar from './components/LeftsideBar';
 import RightSideBar from './components/RightsideBar';
+import ReelsPage from "./pages/Reels";
 function App() {
   return (
     <>
@@ -22,6 +23,7 @@ function App() {
               <Route path="/registration" element={<RegistrationPage/>} />
               <Route path="/profile" element={<ProfilePage/>} />
               <Route path="/setting" element={<SettingsPage/>} />
+              <Route path="/reels" element={<ReelsPage/>} />
             </Routes>
           </div>
           <RightSideBar/>
