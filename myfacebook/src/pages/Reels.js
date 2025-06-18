@@ -1,8 +1,11 @@
 import React from 'react'
+import ReelComponent from '../components/ReelsComponents/ReelComponent'
 
 function ReelsPage() {
   return (
-    <div>Reels</div>
+    <>
+    <ReelComponent/>
+    </>
   )
 }
 
