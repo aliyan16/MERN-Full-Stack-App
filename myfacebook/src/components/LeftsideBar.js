@@ -1,7 +1,5 @@
 import React from "react";
-import { AiOutlineDashboard } from "react-icons/ai";
-import { FaAddressCard, FaArrowCircleDown, FaArrowDown, FaGamepad, FaStore, FaTachometerAlt, FaUserFriends, FaUsers } from "react-icons/fa";
-import { Fa42Group } from "react-icons/fa6";
+import { FaAddressCard, FaArrowCircleDown, FaGamepad, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
 import { IoIosAnalytics } from "react-icons/io";
 
 
