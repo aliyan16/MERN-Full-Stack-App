@@ -1,7 +1,7 @@
 import React from "react";
-import Stories from "../components/Stories";
-import Posts from "../components/Posts";
-import NewPostComponent from "../components/newPost";
+import Stories from "../components/StoryComponents/Stories";
+import Posts from "../components/PostComponents/Posts";
+import NewPostComponent from "../components/PostComponents/newPost";
 
 
 function HomePage(){
