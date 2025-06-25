@@ -1,18 +1,20 @@
 import React from "react";
 import { FaAddressCard, FaArrowCircleDown, FaGamepad, FaStore, FaUserFriends, FaUsers } from "react-icons/fa";
 import { IoIosAnalytics } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 
 function LeftSideBar(){
+    const navigate=useNavigate();
     return(
         <>
         <div className="bg-white p-4 overflow-y-auto hidden w-64 lg:block" >
             <div className="space-y-10 p-4" >
-                <div className="flex space-x-2 cursor-pointer ">
+                <div className="flex space-x-2 cursor-pointer " onClick={()=> navigate('/friends')} >
                     <FaUserFriends className="text-xl" />
                     <span>Friends</span>
                 </div>
-                <div className="flex space-x-2 cursor-pointer">
+                <div className="flex space-x-2 cursor-pointer" onClick={()=> navigate('/home')} >
                     <FaAddressCard className="text-xl" />
                     <span>Feed</span>
                 </div>
