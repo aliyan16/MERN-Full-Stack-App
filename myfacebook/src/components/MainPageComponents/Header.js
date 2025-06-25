@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaFacebook, FaHome, FaVideo, FaUserFriends, FaBell, FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import ProfileDropDown from './ProfileDropdown';
 
 export default function Header() {
   const navigate=useNavigate()
@@ -18,7 +19,8 @@ export default function Header() {
       </div>
       <div className="flex space-x-8 text-2xl">
         <FaBell className="cursor-pointer" onClick={()=> navigate('/notification')} />
-        <FaUserCircle className="cursor-pointer" onClick={()=> navigate('/profile')} />
+        {/* <FaUserCircle className="cursor-pointer" onClick={()=> navigate('/profile')} /> */}
+        <ProfileDropDown/>
       </div>
     </header>
   );
