@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Stories from "../components/StoryComponents/Stories";
 import Posts from "../components/PostComponents/Posts";
 import NewPostComponent from "../components/PostComponents/newPost";
+import axios from "axios";
 
 
 function HomePage(){
+    const [posts,setPosts]=useState([])
+    const fetchPosts=async()=>{
+        try{
+            const response=await axios.get('http://localhost:5000/get-post')
+            setPosts(response.data)
+            console.log('post data fetched')
+        }catch(e){
+            console.error('Error fetching posts ',e)
+        }
+    }
+    useEffect(()=>{
+        fetchPosts();
+    },[])
     return(
         <>
         <div className="space-y-4" >
-            <NewPostComponent/>
+            <NewPostComponent onPostSubmit={fetchPosts} />
             <Stories/>
-            <Posts username='User 1' content='This is my Facebook Clone' />
-            <Posts username='User 2' content='This is my first post' />
+            {posts.map((post,index)=>(
+                <Posts key={index} username={post.username} content={post.postvalue} />
+            ))}
         </div>
         </>
     )

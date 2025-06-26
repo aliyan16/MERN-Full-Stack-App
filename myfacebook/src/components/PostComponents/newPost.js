@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-function NewPostComponent() {
+function NewPostComponent({onPostSubmit}) {
     const [post,setPost]=useState('')
     const handleKeyDown=(e)=>{
       if (e.key==='Enter' && post.trim() !==''){
@@ -17,6 +17,7 @@ function NewPostComponent() {
         })
         console.log('post uploaded')
         setPost('')
+        if (onPostSubmit) onPostSubmit();
 
       }catch(e){
         console.error('Error posting ',e)

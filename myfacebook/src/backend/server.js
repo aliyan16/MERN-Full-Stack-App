@@ -29,6 +29,17 @@ app.post('/create-post',async (req,res)=>{
     }
 })
 
+app.get('/get-post',async(req,res)=>{
+    try{
+        const posts=await Newpost.find().sort({_id:-1})
+        res.json(posts)
+        console.log('posts retrieved')
+    }catch(e){
+        console.error('Error ',e)
+        res.status(500).json({error:'Internal server error'})
+
+    }
+})
 
 
 
