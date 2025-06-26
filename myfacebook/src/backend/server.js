@@ -3,6 +3,8 @@ const express= require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const Newpost=require('./models/PostSchema')
+const multer=require('multer')
+const path=require('path')
 
 const app=express()
 const port=5000;
@@ -10,6 +12,18 @@ const port=5000;
 
 app.use(bodyParser.json())
 app.use(cors())
+/// for file uploading
+app.use('/uploads',express.static('uploads'))
+const storage=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,'./uploads/')
+    },
+    filename:(req,file,cb)=>{
+        cb(null,`${Date.now()}_${file.originalname}`)
+    }
+})
+const upload=multer({storage})
+////
 
 
 mongoose.connect('mongodb+srv://aliyanm12376:aliyan123@cluster0.kzpdbcw.mongodb.net/MyFB', {
@@ -20,7 +34,9 @@ mongoose.connect('mongodb+srv://aliyanm12376:aliyan123@cluster0.kzpdbcw.mongodb.
 app.post('/create-post',async (req,res)=>{
     try{
         const {username,postvalue}=req.body
-        const newPost=new Newpost({username,postvalue})
+        const media=req.file?`/uploads/${req.file.filename}`:null
+
+        const newPost=new Newpost({username,postvalue,media})
         await newPost.save()
         res.status(201).json({message:'Post created successfully'})
     }catch(e){

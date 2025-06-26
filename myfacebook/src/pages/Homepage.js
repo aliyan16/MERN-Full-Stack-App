@@ -25,7 +25,7 @@ function HomePage(){
             <NewPostComponent onPostSubmit={fetchPosts} />
             <Stories/>
             {posts.map((post,index)=>(
-                <Posts key={index} username={post.username} content={post.postvalue} />
+                <Posts key={index} username={post.username} content={post.postvalue} media={post.media} />
             ))}
         </div>
         </>
