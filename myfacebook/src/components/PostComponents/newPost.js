@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 function NewPostComponent() {
     const [post,setPost]=useState('')
@@ -10,24 +11,16 @@ function NewPostComponent() {
     }
     const handlePost=async()=>{
       try{
-        const response=await fetch('http://localhost:5000/create-post',{
-          method:'POST',
-          headers:{
-            'Content-Type':'application/json',
-          },
-          body:JSON.stringify({
-            username:'',
-            postvalue:post,
-          }),
+        await axios.post('http://localhost:5000/create-post',{
+          username:'',
+          postvalue:post
         })
-        if(response.ok){
-          console.log('Post uploaded')
-          setPost('')
-        }else{
-          console.error('Failed to post')
-        }
+        console.log('post uploaded')
+        setPost('')
+
       }catch(e){
-        console.error('Error ',e)
+        console.error('Error posting ',e)
+        
       }
     }
   return (
