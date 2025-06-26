@@ -14,7 +14,7 @@ function Posts({username,content,media}){
                         <source src={`http://localhost:5000${media}`} />
                     </video>
                 ) :(
-                    <img src={`http:localhost:5000${media}`} alt="post" className="max-w-full rounded"/>
+                    <img src={`http://localhost:5000${media}`} alt="post" className="max-w-full rounded"/>
                 )
             )}
             

@@ -31,7 +31,7 @@ mongoose.connect('mongodb+srv://aliyanm12376:aliyan123@cluster0.kzpdbcw.mongodb.
   useUnifiedTopology: true,
 });
 
-app.post('/create-post',async (req,res)=>{
+app.post('/create-post',upload.single('media'),async (req,res)=>{
     try{
         const {username,postvalue}=req.body
         const media=req.file?`/uploads/${req.file.filename}`:null

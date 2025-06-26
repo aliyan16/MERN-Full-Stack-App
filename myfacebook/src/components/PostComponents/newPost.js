@@ -5,6 +5,7 @@ function NewPostComponent({onPostSubmit}) {
     const [post,setPost]=useState('')
     const [file,setFile]=useState(null)
     const [previewURL,setPreviewURL]=useState(null)
+    const [selected, setSelectedFile] = useState(null);
     const handleKeyDown=(e)=>{
       if (e.key==='Enter' && post.trim() !==''){
         handlePost()
@@ -29,9 +30,11 @@ function NewPostComponent({onPostSubmit}) {
       }
     }
     const handleFileChange=(e)=>{
-      const selected=e.target.files[0]
-      setFile(selected)
-      setPreviewURL(URL.createObjectURL(selected))
+    const selected = e.target.files[0];
+    if (selected) {
+      setFile(selected);
+      setPreviewURL(URL.createObjectURL(selected));
+    }
     }
   return (
     <>
