@@ -23,7 +23,7 @@ function ProfileDropDown(){
     return(
         <>
         <div className="relative" ref={dropdownRef} >
-            <button className="flex items-center focus:outline-none" >
+            <button className="flex items-center focus:outline-none" onClick={()=>setIsOpen(!isOpen)} >
                 <FaUserCircle className="text-2xl cursor-pointer hover:text-gray-600" />
 
             </button>
@@ -34,6 +34,17 @@ function ProfileDropDown(){
                         Profile
 
                     </button>
+                    <button onClick={()=>{ navigate('/setting'); setIsOpen(false);} }className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" >
+                        <FaUserCircle className="mr-2" />
+                        Settings
+
+                    </button>
+                    <button onClick={()=>{ navigate('/'); setIsOpen(false);} }className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" >
+                        <FaUserCircle className="mr-2" />
+                        Logout
+
+                    </button>
+
                 </div>
             )}
 
