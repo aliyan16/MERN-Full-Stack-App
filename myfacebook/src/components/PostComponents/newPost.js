@@ -8,9 +8,27 @@ function NewPostComponent() {
       }
 
     }
-    const handlePost=()=>{
-      console.log('post uploaded')
-      setPost('')
+    const handlePost=async()=>{
+      try{
+        const response=await fetch('http://localhost:5000/create-post',{
+          method:'POST',
+          headers:{
+            'Content-Type':'application/json',
+          },
+          body:JSON.stringify({
+            username:'',
+            postvalue:post,
+          }),
+        })
+        if(response.ok){
+          console.log('Post uploaded')
+          setPost('')
+        }else{
+          console.error('Failed to post')
+        }
+      }catch(e){
+        console.error('Error ',e)
+      }
     }
   return (
     <>
