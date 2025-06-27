@@ -3,7 +3,10 @@ const mongoose=require('mongoose')
 const PostSchema= new mongoose.Schema({
     username:String,
     postvalue:String,
-    media:String,
+    media:{
+        data:Buffer,
+        contentType:String
+    }
 
 })
 

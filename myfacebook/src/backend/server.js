@@ -15,15 +15,16 @@ app.use(cors())
 /// for file uploading
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const storage=multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null, path.join(__dirname, 'uploads'))
+// const storage=multer.diskStorage({
+//     destination:(req,file,cb)=>{
+//         cb(null, path.join(__dirname, 'uploads'))
 
-    },
-    filename:(req,file,cb)=>{
-        cb(null,`${Date.now()}_${file.originalname}`)
-    }
-})
+//     },
+//     filename:(req,file,cb)=>{
+//         cb(null,`${Date.now()}_${file.originalname}`)
+//     }
+// })
+const storage=multer.memoryStorage()
 const upload=multer({storage})
 ////
 
@@ -36,9 +37,9 @@ mongoose.connect('mongodb+srv://aliyanm12376:aliyan123@cluster0.kzpdbcw.mongodb.
 app.post('/create-post',upload.single('media'),async (req,res)=>{
     try{
         const {username,postvalue}=req.body
-        const media=req.file?`/uploads/${req.file.filename}`:null
+        // const media=req.file?`/uploads/${req.file.filename}`:null
 
-        const newPost=new Newpost({username,postvalue,media})
+        const newPost=new Newpost({username,postvalue,media:req.file?{data:req.file.buffer,contentType:req.file.mimetype}:null})
         await newPost.save()
         res.status(201).json({message:'Post created successfully'})
     }catch(e){
@@ -55,6 +56,19 @@ app.get('/get-post',async(req,res)=>{
     }catch(e){
         console.error('Error ',e)
         res.status(500).json({error:'Internal server error'})
+
+    }
+})
+
+app.get('/media/:id',async(req,res)=>{
+    try{
+        const post=await Newpost.findById(req.params.id)
+        if(!post || !post.media) {return res.status(404).send('No media found')}
+
+        res.contentType(post.media.contentType)
+        res.send(post.media.data)
+    }catch(e){
+        res.status(500).send('Error fetching media')
 
     }
 })

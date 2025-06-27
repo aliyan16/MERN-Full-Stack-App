@@ -2,7 +2,7 @@ import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 
 
-function Posts({username,content,media}){
+function Posts({username,content,media,id}){
     return(
         <>
         <div className="bg-white p-4 rounded-lg shadow" >
@@ -11,10 +11,10 @@ function Posts({username,content,media}){
             {media && (
                 media.endsWith('.mp4')?(
                     <video controls className="max-w-full rounded" >
-                        <source src={`http://localhost:5000${media}`} />
+                        <source src={`http://localhost:5000/media/${id}`} />
                     </video>
                 ) :(
-                    <img src={`http://localhost:5000${media}`} alt="post" className="max-w-full rounded"/>
+                    <img src={`http://localhost:5000/media/${id}`} alt="post" className="max-w-full rounded"/>
                 )
             )}
             
