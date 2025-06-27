@@ -4,6 +4,7 @@ const PostSchema= new mongoose.Schema({
     username:String,
     postvalue:String,
     media:{
+        fileId:mongoose.Schema.Types.ObjectId,
         data:Buffer,
         contentType:String
     }
