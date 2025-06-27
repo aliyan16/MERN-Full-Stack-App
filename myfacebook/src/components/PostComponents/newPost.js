@@ -15,7 +15,7 @@ function NewPostComponent({onPostSubmit}) {
     const handlePost=async()=>{
       try{
         const PostData=new FormData()
-        PostData.append('username','')
+        PostData.append('username','Aliyan')
         PostData.append('postvalue',post)
         if(file){PostData.append('media',file)}
         await axios.post('http://localhost:5000/create-post',PostData,{
