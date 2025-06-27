@@ -31,6 +31,8 @@ app.use(cors())
 // const storage=multer.memoryStorage()
 // const upload=multer({storage})
 ////
+let gfs;
+let storage;
 
 const mongoURL='mongodb+srv://aliyanm12376:aliyan123@cluster0.kzpdbcw.mongodb.net/MyFB'
 
@@ -39,43 +41,54 @@ mongoose.connect(mongoURL, {
   useUnifiedTopology: true,
 });
 
-let gfs;
-let storage
 const conn = mongoose.connection;
 conn.once('open',()=>{
     console.log('DB Connected')
     gfs=new mongoose.mongo.GridFSBucket(conn.db,{
         bucketName:'uploads'
     })
-})
+    storage=new GridFsStorage({
 
- storage=new GridFsStorage({
-    url:mongoURL,
-    // options:{userNewUrlParser:true,useUnifiedTopology:true},
-    file:(req,file)=>{
-        return new Promise((resolve,reject)=>{
-            const filename=`${Date.now()}-${file.originalname}`
-            const fileInfo={
-                filename:filename,
+        db:conn.db,
+        // options:{userNewUrlParser:true,useUnifiedTopology:true},
+        file:(req,file)=>{
+            return {
+                filename:`${Date.now()}-${file.originalname}`,
                 bucketName:'uploads'
             }
-            resolve(fileInfo)
-        })
-    }
+        }
+    })
+
 })
 
-const upload=multer({storage})
+ 
+conn.on('error',(e)=>{
+    console.error('Mongodb connection error ',e)
+})
+
+const upload=multer({
+    storage:(req,file,cb)=>{
+        if(!storage){
+            return cb(new Error('Database connection not ready'))
+        }
+        storage._handleFile(req,file,cb)
+    }
+})
 
 
 app.post('/create-post',upload.single('media'),async (req,res)=>{
     try{
+        if(!req.file){
+            return res.status(400).json({error:'No file uploaded'})
+        }
+
         const {username,postvalue}=req.body
         // const media=req.file?`/uploads/${req.file.filename}`:null
-        const media=req.file?{
+        const media={
             fileId:req.file.id,
             fileName:req.file.filename,
             contentType:req.file.contentType
-        }:null
+        }
 
         const newPost=new Newpost({username,postvalue,media})
         await newPost.save()
@@ -100,9 +113,11 @@ app.get('/get-post',async(req,res)=>{
 
 app.get('/media/:id',async(req,res)=>{
     try{
-        const file=await conn.db.collection('uploads.files').findOne({
-            _id:new mongoose.Types.ObjectId(req.params.id)
-        })
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            return res.status(400).json({message:'Invalid file ID'})
+        }
+        const fileId=new mongoose.Types.ObjectId(req.params.id)
+        const file=await conn.db.collection('uploads.files').findOne({_id:fileId})
         if(!file){
             return res.status(404).json({message:'File not found'})
         }

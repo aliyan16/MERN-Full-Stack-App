@@ -5,7 +5,7 @@ const PostSchema= new mongoose.Schema({
     postvalue:String,
     media:{
         fileId:mongoose.Schema.Types.ObjectId,
-        data:Buffer,
+        fileName:String,
         contentType:String
     }
 
