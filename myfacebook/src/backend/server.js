@@ -210,6 +210,16 @@ app.use('/signin',async (req,res)=>{
   }
 })
 
+app.use('/get-users',async (req,res)=>{
+  try{
+    const users=await RegisterAccount.find({},'firstName lastName')
+    res.json(users)
+  }catch(e){
+    console.error('Error fetching users',e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
 })
