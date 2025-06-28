@@ -10,6 +10,10 @@ const {GridFsStorage}=require('multer-gridfs-storage')
 const Grid=require('gridfs-stream');
 // const { connect } = require('http2');
 
+const bcrypt=require('bcrypt');
+const RegisterAccount = require('./models/RegisterSchema');
+const { error } = require('console');
+
 const app=express()
 const port=5000;
 
@@ -52,7 +56,7 @@ mongoose.connect(mongoURL, {
 // const storage=multer.memoryStorage()
 // const upload=multer({storage})
 ////
-let gfs;
+
 // let storage;
 
 
@@ -60,6 +64,7 @@ let gfs;
 
 // const conn = mongoose.connection;
 
+let gfs;
 
 mongoose.connection.once('open',()=>{
     console.log('DB Connected')
@@ -168,6 +173,23 @@ app.use('/get-videos',async (req,res)=>{
   }
 })
 
+app.use('/register',async(req,res)=>{
+  try{
+    const {firstName,lastName,dob,gender,emailOrMobile,password}=req.body
+    const existingUser=await RegisterAccount.findOne({emailOrMobile})
+    if(existingUser){
+      return res.status(400).json({error:'Email or Mobile number already exists'})
+    }
+    const saltRounds=10
+    const hashedPassword=await bcrypt.hash(password,saltRounds)
+    const newUser=new RegisterAccount({firstName,lastName,dob,gender,emailOrMobile,password:hashedPassword})
+    await newUser.save()
+    res.status(201).json({message:'Account created successfully'})
+  }catch(e){
+    console.error('Error creating account ',e)
+    res.status(500).json({error:'Server error'})
+  }
+})
 
 
 app.listen(port,()=>{
