@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function SigninPage(){
+function SigninPage({setCurrentUser}){
     const navigate=useNavigate()
     const [SigninData,setSigninData]=useState({
         emailOrMobile:'',
@@ -21,6 +21,7 @@ function SigninPage(){
         try{
             const res=await axios.post('http://localhost:5000/signin',SigninData)
             alert(res.data.message)
+            setCurrentUser(res.data.user)
             navigate('/home')
         }catch(e){
             console.error('Error logging in ',e)

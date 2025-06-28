@@ -202,7 +202,7 @@ app.use('/signin',async (req,res)=>{
     if(!isMatch){
       return res.status(400).json({error:'Invalid password'})
     }
-    res.json({message:'Sign in successful',user:{firstname:user.firstName,lastName:user.lastName}})
+    res.json({message:'Sign in successful',user:{firstName:user.firstName,lastName:user.lastName}})
   }catch(e){
     console.error('Sign in error',e)
     res.status(500).json({error:'server error'})

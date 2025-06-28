@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router,Routes,Route } from "react-router-dom";
 import HomePage from "../pages/Homepage";
 import ProfilePage from "../pages/profilepage";
@@ -15,16 +15,17 @@ import { useLocation } from "react-router-dom";
 
 function PageRouting() {
  const location=useLocation();
+ const [currentUser,setCurrentUser]=useState(null)
   const isAuthPage=location.pathname==='/'|| location.pathname==='/registration';
   return (
     <>
       <div className="flex flex-col h-screen">
         { !isAuthPage && <Header/>}
         <div className="flex flex-1 overflow-hidden">
-          {!isAuthPage &&<LeftSideBar/>}
+          {!isAuthPage &&<LeftSideBar user={currentUser} />}
           <div className="flex-1 overflow-y-auto bg-gray-100 p-4">
             <Routes>
-              <Route path="/" element={<SigninPage/>} />
+              <Route path="/" element={<SigninPage setCurrentUser={setCurrentUser} />} />
               <Route path="/home" element={<HomePage/>} />
               <Route path="/registration" element={<RegistrationPage/>} />
               <Route path="/profile" element={<ProfilePage/>} />
