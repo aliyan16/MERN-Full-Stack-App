@@ -31,7 +31,7 @@ function RegistrationPage() {
   const handleSubmit=async (e)=>{
     e.preventDefault()
     try{
-      const res=await axios.post('http:localhost:5000/register',RegisterData)
+      const res=await axios.post('http://localhost:5000/register',RegisterData)
       alert(res.data.message || 'Registration Successful')
     }catch(e){
       console.error('Registration Failed ',e)
@@ -53,6 +53,7 @@ function RegistrationPage() {
           <div className="flex space-x-2 mb-3">
             <input
               type="text"
+              name="firstName"
               placeholder="First name"
               value={RegisterData.firstName}
               onChange={handleChange}
@@ -61,6 +62,7 @@ function RegistrationPage() {
             />
             <input
               type="text"
+              name="lastName"
               placeholder="Last Name"
               value={RegisterData.lastName}
               onChange={handleChange}
@@ -70,19 +72,19 @@ function RegistrationPage() {
           </div>
           <label className="block text-xs text-gray-600 mb-1">Date of birth</label>
           <div className="flex space-x-2 mb-3">
-            <select value={RegisterData.dob.day} onChange={handleChange} required  className="w-1/3 p-2 border rounded">
+            <select value={RegisterData.dob.day} name="day" onChange={handleChange} required  className="w-1/3 p-2 border rounded">
               <option>Day</option>
               {[...Array(31).keys()].map(i => (
                 <option key={i+1} value={i+1}>{i+1}</option>
               ))}
             </select>
-            <select value={RegisterData.dob.month} onChange={handleChange} required  className="w-1/3 p-2 border rounded">
+            <select value={RegisterData.dob.month} name="month" onChange={handleChange} required  className="w-1/3 p-2 border rounded">
               <option>Month</option>
               {["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map(m => (
                 <option key={m} value={m}>{m}</option>
               ))}
             </select>
-            <select value={RegisterData.dob.year} onChange={handleChange} required  className="w-1/3 p-2 border rounded">
+            <select value={RegisterData.dob.year} name="year" onChange={handleChange} required  className="w-1/3 p-2 border rounded">
               <option>Year</option>
               {[...Array(100).keys()].map(i => {
                 const y = new Date().getFullYear() - i;
@@ -101,6 +103,7 @@ function RegistrationPage() {
           </div>
           <input
             type="text"
+            name="emailOrMobile"
             placeholder="Mobile number or email address"
             value={RegisterData.emailOrMobile}
             onChange={handleChange}
@@ -109,6 +112,7 @@ function RegistrationPage() {
           />
           <input
             type="password"
+            name="password"
             placeholder="New password"
             value={RegisterData.password}
             onChange={handleChange}
