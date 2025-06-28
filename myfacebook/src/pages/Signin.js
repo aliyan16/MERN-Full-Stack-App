@@ -15,7 +15,7 @@ function SigninPage(){
                     <form>
                         <input type="text" placeholder="Email address or phone number" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-blue-500" />
                         <input type="password" placeholder="Password" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        <button type="submit" className="w-full bg-blue text-white p-3 rounded font-semibold hover:bg-blue-700" >
+                        <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700" >
                             Log in
 
                         </button>
@@ -27,11 +27,19 @@ function SigninPage(){
 
                         </div>
                         <hr className="my-4" />
-                        <button>
-                            
+                        <button type="button" className="w-full bg-green-600 text-white p-3 rounded font-semibold hover:bg-green-700" >
+                            Create new account
+
                         </button>
                     </form>
+                    <div className="text-center text-sm mt-4" >
+                        <a href="#" className="font-semibold hover:underline">
+                            Create a Page
 
+                        </a>{' '}
+                        for a celebrity,brand or business
+
+                    </div>
                 </div>
 
             </div>
