@@ -14,6 +14,8 @@ const bcrypt=require('bcrypt');
 const RegisterAccount = require('./models/RegisterSchema');
 const { error } = require('console');
 
+const Story=require('./models/StorySchema')
+
 const app=express()
 const port=5000;
 
@@ -217,6 +219,54 @@ app.use('/get-users',async (req,res)=>{
   }catch(e){
     console.error('Error fetching users',e)
     res.status(500).json({error:'Server error'})
+  }
+})
+
+app.use('/upload-story',upload.single('media'),async(req,res)=>{
+  try{
+    if(!req.file){
+      return res.status(400).json({error:"No file uploaded"})
+    }
+    const {username}=req.body
+    const fileName=`${Date.now()}-${req.file.originalname}`
+    const bucket=new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
+    const uploadStream=bucket.openUploadStream(fileName,{
+      contentType:req.file.mimetype
+    })
+    uploadStream.end(req.file.buffer)
+    uploadStream.on('finish',async()=>{
+      const fileDoc=await mongoose.connection.db.collection('uploads.files').findOne({filename:fileName})
+      if(!fileDoc){
+        return res.status(500).json({error:"File saved but not found in DB"})
+      }
+      const media={
+        fileId:fileDoc._id,
+        fileName:fileDoc.filename,
+        contentType:fileDoc.contentType
+      }
+      const newStory=new Story({username,media})
+      await newStory.save()
+      res.status(201).json({message:'Story uploaded successfully'})
+    })
+    uploadStream.on('error',(e)=>{
+      console.error('Error uploading story',e)
+      res.status(500).json({error:'Error uploading story file'})
+    })
+
+  }catch(e){
+    console.error('Error creating story',e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
+app.get('/get-stories',async(req,res)=>{
+  try{
+    const stories=await Story.find().sort({createdAt:-1})
+    res.json(stories)
+  }catch(e){
+    console.error('Error fetching stories ',e)
+    res.status(500).json({error:'Server error'})
+
   }
 })
 

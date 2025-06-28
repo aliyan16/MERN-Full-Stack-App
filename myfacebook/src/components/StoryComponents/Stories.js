@@ -29,6 +29,7 @@ function Stories(){
         }
         const StoryData=new FormData()
         StoryData.append('Story',file)
+        StoryData.append('username','')
         try{
             await axios.post('http://localhost:5000/upload-story',StoryData,{
                 headers:{'Content-Type':'multipart/form-data'}
