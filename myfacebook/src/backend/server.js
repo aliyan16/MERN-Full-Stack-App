@@ -157,6 +157,17 @@ app.get('/media/:id',async(req,res)=>{
     }
 })
 
+app.use('/get-videos',async (req,res)=>{
+  try{
+    const videos=await Newpost.find({'media.contentType':{$regex:'^video'}}).sort({_id:-1})
+    res.json(videos)
+    console.log('Videos fetched')
+  }catch(e){
+    console.error('Error fetching videos ',e)
+    res.status(500).json({error:'Internal server error'})
+  }
+})
+
 
 
 app.listen(port,()=>{
