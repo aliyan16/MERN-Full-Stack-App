@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
+  const navigate=useNavigate()
   const [RegisterData,setRegisterData]=useState({
     firstName:'',
     lastName:'',
@@ -123,7 +125,7 @@ function RegistrationPage() {
             Sign Up
           </button>
           <div className="text-center mt-3">
-            <a href="#" className="text-blue-600 hover:underline">Already have an account?</a>
+            <a onClick={()=>navigate('/')} className="text-blue-600 hover:underline cursor-pointer">Already have an account?</a>
           </div>
         </form>
       </div>

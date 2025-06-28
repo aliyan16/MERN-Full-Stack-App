@@ -15,7 +15,7 @@ import { useLocation } from "react-router-dom";
 
 function PageRouting() {
  const location=useLocation();
-  const isAuthPage=location.pathname==='/'||'/registration';
+  const isAuthPage=location.pathname==='/'|| location.pathname==='/registration';
   return (
     <>
       <div className="flex flex-col h-screen">

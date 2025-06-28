@@ -1,7 +1,33 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function SigninPage(){
+    const navigate=useNavigate()
+    const [SigninData,setSigninData]=useState({
+        emailOrMobile:'',
+        password:''
+    })
+
+    const handleChange=(e)=>{
+        setSigninData(prev=>({
+            ...prev,
+            [e.target.name]:e.target.value,
+        }))
+    }
+
+    const handleSubmit= async(e)=>{
+        e.preventDefault()
+        try{
+            const res=await axios.post('http://localhost:5000/signin',SigninData)
+            alert(res.data.message)
+            navigate('/home')
+        }catch(e){
+            console.error('Error logging in ',e)
+            alert(e.respone?.data?.message || 'Sign in failed')
+        }
+    }
+
     return(
         <>
         <div className="flex justify-center items-center min-h-screen bg-gray-100" >
@@ -12,9 +38,9 @@ function SigninPage(){
 
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm">
-                    <form>
-                        <input type="text" placeholder="Email address or phone number" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-blue-500" />
-                        <input type="password" placeholder="Password" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <form onSubmit={handleSubmit}>
+                        <input name="emailOrMobile" value={SigninData.emailOrMobile} onChange={handleChange} type="text" placeholder="Email address or phone number" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-blue-500" />
+                        <input name="password" value={SigninData.password} onChange={handleChange} type="password" placeholder="Password" className="w-full p-3 mb-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700" >
                             Log in
 
@@ -27,7 +53,7 @@ function SigninPage(){
 
                         </div>
                         <hr className="my-4" />
-                        <button type="button" className="w-full bg-green-600 text-white p-3 rounded font-semibold hover:bg-green-700" >
+                        <button onClick={()=>navigate('/registration')}  type="button" className="w-full bg-green-600 text-white p-3 rounded font-semibold hover:bg-green-700" >
                             Create new account
 
                         </button>
