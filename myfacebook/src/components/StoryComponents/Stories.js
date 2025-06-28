@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 
-function Stories(){
+function Stories({user}){
     const [file,setFile]=useState(null)
     const [stories,setStories]=useState([])
 
@@ -28,8 +28,8 @@ function Stories(){
             return alert('Please select file')
         }
         const StoryData=new FormData()
-        StoryData.append('Story',file)
-        StoryData.append('username','')
+        StoryData.append('media',file)
+        StoryData.append('username',`${user.firstName} ${user.lastName}`)
         try{
             await axios.post('http://localhost:5000/upload-story',StoryData,{
                 headers:{'Content-Type':'multipart/form-data'}
@@ -64,8 +64,8 @@ function Stories(){
                 </label>
             </div>
             {stories.map((story)=>(
-                <div key={story._id} className="bg-gray-300 w-24 h-40 rounded-lg flex items-center justify-center cursor-pointer" onClick={()=> window.open(`http://localhost:5000/story/${story._id}`,"_blank")}>
-                    <img src={`http://localhost:5000/story/${story._id}`} alt="story" className="object-cover w-full h-full rounded-lg" />
+                <div key={story._id} className="bg-gray-300 w-24 h-40 rounded-lg flex items-center justify-center cursor-pointer" onClick={()=> window.open(`http://localhost:5000/story/${story.media.fileId}`,"_blank")}>
+                    <img src={`http://localhost:5000/story/${story.media.fileId}`} alt="story" className="object-cover w-full h-full rounded-lg" />
 
                 </div>
             ))}

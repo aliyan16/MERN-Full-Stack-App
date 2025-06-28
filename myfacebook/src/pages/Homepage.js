@@ -5,7 +5,7 @@ import NewPostComponent from "../components/PostComponents/newPost";
 import axios from "axios";
 
 
-function HomePage(){
+function HomePage({user}){
     const [posts,setPosts]=useState([])
     const fetchPosts=async()=>{
         try{
@@ -23,7 +23,7 @@ function HomePage(){
         <>
         <div className="space-y-4" >
             <NewPostComponent onPostSubmit={fetchPosts} />
-            <Stories/>
+            <Stories user={user} />
             {posts.map((post,index)=>(
                 <Posts key={index} username={post.username} content={post.postvalue} media={post.media} id={post._id}/>
             ))}

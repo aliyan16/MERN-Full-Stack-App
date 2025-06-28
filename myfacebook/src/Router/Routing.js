@@ -26,7 +26,7 @@ function PageRouting() {
           <div className="flex-1 overflow-y-auto bg-gray-100 p-4">
             <Routes>
               <Route path="/" element={<SigninPage setCurrentUser={setCurrentUser} />} />
-              <Route path="/home" element={<HomePage/>} />
+              <Route path="/home" element={<HomePage user={currentUser} />} />
               <Route path="/registration" element={<RegistrationPage/>} />
               <Route path="/profile" element={<ProfilePage/>} />
               <Route path="/setting" element={<SettingsPage/>} />

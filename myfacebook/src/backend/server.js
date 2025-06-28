@@ -269,6 +269,29 @@ app.get('/get-stories',async(req,res)=>{
 
   }
 })
+app.get('/story/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid story ID' });
+    }
+
+    const file = await mongoose.connection.db.collection('uploads.files').findOne({ _id: new mongoose.Types.ObjectId(id) });
+
+    if (!file) {
+      return res.status(404).json({ message: 'Story file not found' });
+    }
+
+    const downloadStream = gfs.openDownloadStream(file._id);
+    res.set('Content-Type', file.contentType);
+    downloadStream.pipe(res);
+  } catch (e) {
+    console.error('Error fetching story', e);
+    res.status(500).send('Error fetching story');
+  }
+});
+
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
