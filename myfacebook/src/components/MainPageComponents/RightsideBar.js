@@ -6,6 +6,7 @@ import axios from "axios";
 function RightSideBar(){
     const [users,setUsers]=useState([])
 
+    
     const fetchUsers=async ()=>{
         try{
             const res=await axios.get('http://localhost:5000/get-users')

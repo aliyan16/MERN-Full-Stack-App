@@ -10,7 +10,7 @@ function LeftSideBar({user}){
         <>
         <div className="bg-white p-4 overflow-y-auto hidden w-64 lg:block" >
             <div className="space-y-10 p-4" >
-                <div className="flex space-x-2 cursor-pointer " onClick={()=> navigate('/friends')} >
+                <div className="flex space-x-2 cursor-pointer " onClick={()=> navigate('/profile')} >
                     <FaUser className="text-xl" />
                     <span>
                         {user? `${user.firstName} ${user.lastName}`:'Guest'}
