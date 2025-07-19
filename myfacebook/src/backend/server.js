@@ -83,53 +83,82 @@ mongoose.connection.on('error',(e)=>{
 
 
 
-app.post('/create-post', upload.single('media'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
-    }
+// app.post('/create-post', upload.single('media'), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ error: 'No file uploaded' });
+//     }
 
-    const { username, postvalue } = req.body;
-    const fileName = `${Date.now()}-${req.file.originalname}`;
+//     const { username, postvalue } = req.body;
+//     const fileName = `${Date.now()}-${req.file.originalname}`;
 
-    const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: 'uploads' });
-    const uploadStream = bucket.openUploadStream(fileName, {
-      contentType: req.file.mimetype
-    });
+//     const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, { bucketName: 'uploads' });
+//     const uploadStream = bucket.openUploadStream(fileName, {
+//       contentType: req.file.mimetype
+//     });
 
-    uploadStream.end(req.file.buffer);
+//     uploadStream.end(req.file.buffer);
 
-    uploadStream.on('finish', async () => {
-      // Query the file we just uploaded
-      const fileDoc = await mongoose.connection.db.collection('uploads.files').findOne({ filename: fileName });
+//     uploadStream.on('finish', async () => {
+//       // Query the file we just uploaded
+//       const fileDoc = await mongoose.connection.db.collection('uploads.files').findOne({ filename: fileName });
 
-      if (!fileDoc) {
-        return res.status(500).json({ error: 'File saved but not found in DB' });
-      }
+//       if (!fileDoc) {
+//         return res.status(500).json({ error: 'File saved but not found in DB' });
+//       }
 
-      const media = {
-        fileId: fileDoc._id,
-        fileName: fileDoc.filename,
-        contentType: fileDoc.contentType
-      };
+//       const media = {
+//         fileId: fileDoc._id,
+//         fileName: fileDoc.filename,
+//         contentType: fileDoc.contentType
+//       };
 
-      const newPost = new Newpost({ username, postvalue, media });
-      await newPost.save();
+//       const newPost = new Newpost({ username, postvalue, media });
+//       await newPost.save();
 
-      res.status(201).json({ message: 'Post created successfully' });
-    });
+//       res.status(201).json({ message: 'Post created successfully' });
+//     });
 
-    uploadStream.on('error', (err) => {
-      console.error('Error uploading file', err);
-      res.status(500).json({ error: 'Error uploading file' });
-    });
+//     uploadStream.on('error', (err) => {
+//       console.error('Error uploading file', err);
+//       res.status(500).json({ error: 'Error uploading file' });
+//     });
 
-  } catch (e) {
-    console.error('Error creating post', e);
-    res.status(500).json({ error: 'Server error' });
+//   } catch (e) {
+//     console.error('Error creating post', e);
+//     res.status(500).json({ error: 'Server error' });
+//   }
+// });
+
+
+
+app.post('/create-post',upload.single('media'),async(req,res)=>{
+  try{
+    const {username,postvalue,userId}=req.body
+    if(!req.file){return res.status(400).json({error:'No file uploaded'})}
+    const fileName=`${Date.now()}-${req.file.originalname}`
+    const bucket=mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
+    const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
+    uploadStream.end(req.file.buffer)
+    uploadStream.on('finish',async()=>{
+      const newPost=new Newpost({
+        username,
+        userId,
+        postvalue,
+        media:{
+          fileId:uploadStream.id,
+          fileName,
+          contentType:req.file.mimetype
+        }
+      })
+      await newPost.save()
+      res.status(201).json({message:'Post created successfully'})
+    })
+  }catch(e){
+    console.error(e)
+    res.status(500).json({error:'Server error'})
   }
-});
-
+})
 
 app.get('/get-post',async(req,res)=>{
     try{
@@ -312,6 +341,16 @@ app.post('/update-profile-pic/:userId',upload.single('media'),async(req,res)=>{
     })
   }catch(e){
     console.error(e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
+app.get('/get-user-posts/:userId',async(req,res)=>{
+  try{
+    const posts=await Newpost.find({userId:req.params.userId}).sort({_id:-1})
+    res.json(posts)
+  }catch(e){
+    console.error('Error fetching user posts ',e)
     res.status(500).json({error:'Server error'})
   }
 })
