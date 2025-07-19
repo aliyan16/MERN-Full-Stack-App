@@ -3,12 +3,14 @@ import ProfileHeader from '../components/profilePageComponents/profileHeader';
 import FriendsSection from '../components/profilePageComponents/friendsSection';
 import ImagesSection from '../components/profilePageComponents/profileImages';
 import Posts from '../components/PostComponents/Posts';
+import { useParams } from 'react-router-dom';
 
 
-const ProfilePage = ({ userId }) => {
+const ProfilePage = ({ user }) => {
+  const { userId } = useParams();
   return (
     <div className="bg-gray-100 min-h-screen">
-      <ProfileHeader userId={userId} />
+      <ProfileHeader userId={userId} user={user}/>
 
       <div className="max-w-5xl mx-auto mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="space-y-4">

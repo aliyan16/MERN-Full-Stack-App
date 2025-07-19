@@ -357,7 +357,7 @@ app.get('/get-user-posts/:userId',async(req,res)=>{
 
 app.post('/update-cover-pic/:userId',upload.single('media'),async(req,res)=>{
   try{
-    const {userId}=req.body.params
+    const {userId}=req.params
     if (!req.file){return res.status(400).json({error:'No file uploaded'})}
 
     const fileName=`${Date.now()}-${req.file.originalname}`
@@ -365,7 +365,7 @@ app.post('/update-cover-pic/:userId',upload.single('media'),async(req,res)=>{
     const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
     uploadStream.end(req.file.buffer)
     uploadStream.on('finish',async()=>{
-      await RegisterAccount.findById(userId,{
+      await RegisterAccount.findByIdAndUpdate(userId,{
         coverPic:{
           fileId:uploadStream.id,
           fileName,
@@ -403,7 +403,11 @@ app.get('/get-user-images/:userId',async(req,res)=>{
 
 app.get('/get-user-profile/:userId',async(req,res)=>{
   try{
-    const user=await RegisterAccount.findById(req.params.userId,'profilepic coverPic')
+    const { userId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: 'Invalid user ID' });
+    }
+    const user=await RegisterAccount.findById(req.params.userId,'profilePic coverPic')
     if(!user) {return res.status(404).json({error:' User not found'})}
     res.json(user)
   }catch(e){

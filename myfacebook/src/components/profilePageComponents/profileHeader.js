@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProfileHeader = ({ userId }) => {
+const ProfileHeader = ({ userId,user }) => {
   const [coverPic, setCoverPic] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
 
   useEffect(() => {
+    if(!userId){return}
     axios.get(`http://localhost:5000/get-user-profile/${userId}`)
       .then(res => {
         if (res.data.profilePic) {

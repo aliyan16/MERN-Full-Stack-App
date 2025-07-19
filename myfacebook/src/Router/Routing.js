@@ -28,7 +28,7 @@ function PageRouting() {
               <Route path="/" element={<SigninPage setCurrentUser={setCurrentUser} />} />
               <Route path="/home" element={<HomePage user={currentUser} />} />
               <Route path="/registration" element={<RegistrationPage/>} />
-              <Route path="/profile/:userId" element={<ProfilePage />} />
+              <Route path="/profile/:userId" element={<ProfilePage user={currentUser}/>} />
               <Route path="/setting" element={<SettingsPage/>} />
               <Route path="/reels" element={<ReelsPage/>} />
               <Route path="/friends" element={<FriendsPage/>} />
