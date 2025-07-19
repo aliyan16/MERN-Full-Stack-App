@@ -16,18 +16,24 @@ function SigninPage({setCurrentUser}){
         }))
     }
 
-    const handleSubmit= async(e)=>{
-        e.preventDefault()
-        try{
-            const res=await axios.post('http://localhost:5000/signin',SigninData)
-            alert(res.data.message)
-            setCurrentUser(res.data.user)
-            navigate('/home')
-        }catch(e){
-            console.error('Error logging in ',e)
-            alert(e.respone?.data?.message || 'Sign in failed')
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post('http://localhost:5000/signin', SigninData);
+            alert(res.data.message);
+            
+            // Store the complete user object
+            setCurrentUser(res.data.user);
+            
+            // Optional: Store in localStorage for persistence
+            // localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+            
+            navigate('/home');
+        } catch (e) {
+            console.error('Error logging in', e);
+            alert(e.response?.data?.error || 'Sign in failed');
         }
-    }
+        };
 
     return(
         <>

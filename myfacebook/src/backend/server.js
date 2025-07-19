@@ -222,24 +222,38 @@ app.use('/register',async(req,res)=>{
   }
 })
 
-app.use('/signin',async (req,res)=>{
-  try{
-    const {emailOrMobile,password}=req.body
-    const user=await RegisterAccount.findOne({emailOrMobile})
-    if(!user){
-      return res.status(404).json({error:'Invalid email/phone'})
+app.use('/signin', async (req, res) => {
+  try {
+    const { emailOrMobile, password } = req.body;
+    const user = await RegisterAccount.findOne({ emailOrMobile });
+    
+    if (!user) {
+      return res.status(404).json({ error: 'Invalid email/phone' });
     }
-    const isMatch=await bcrypt.compare(password,user.password)
-    if(!isMatch){
-      return res.status(400).json({error:'Invalid password'})
-    }
-    res.json({message:'Sign in successful',user:{firstName:user.firstName,lastName:user.lastName}})
-  }catch(e){
-    console.error('Sign in error',e)
-    res.status(500).json({error:'server error'})
 
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid password' });
+    }
+
+    // Return complete user information including _id
+    res.json({
+      message: 'Sign in successful',
+      user: {
+        _id: user._id,  // This is the crucial addition
+        firstName: user.firstName,
+        lastName: user.lastName,
+        // Include any other relevant user data
+        emailOrMobile: user.emailOrMobile,
+        profilePic: user.profilePic,
+        coverPic: user.coverPic
+      }
+    });
+  } catch (e) {
+    console.error('Sign in error', e);
+    res.status(500).json({ error: 'Server error' });
   }
-})
+});
 
 // app.use('/get-users',async (req,res)=>{
 //   try{
