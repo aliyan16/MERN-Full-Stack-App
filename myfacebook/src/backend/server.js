@@ -292,6 +292,30 @@ app.get('/story/:id', async (req, res) => {
   }
 });
 
+app.post('/update-profile-pic/:userId',upload.single('media'),async(req,res)=>{
+  try{
+    const {userId}=req.params
+    if(!req.file) {return res.status(400).json({error:'No file uploaded'})}
+    const fileName=`${Date.now()}-${req.file.originalname}`
+    const bucket=new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
+    const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
+    uploadStream.end(req.file.buffer)
+    uploadStream.on('finish',async()=>{
+      await RegisterAccount.findByIdAndUpdate(user,{
+        profilePic:{
+          fileId:uploadStream.id,
+          fileName,
+          contentType:req.file.mimetype
+        }
+      })
+      res.json({message:'Profile picture updated'})
+    })
+  }catch(e){
+    console.error(e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
