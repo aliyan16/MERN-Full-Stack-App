@@ -132,45 +132,77 @@ mongoose.connection.on('error',(e)=>{
 
 
 
-app.post('/create-post',upload.single('media'),async(req,res)=>{
-  try{
-    const {username,postvalue,userId}=req.body
-    if(!req.file){return res.status(400).json({error:'No file uploaded'})}
-    const fileName=`${Date.now()}-${req.file.originalname}`
-    const bucket=new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
-    const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
-    uploadStream.end(req.file.buffer)
-    uploadStream.on('finish',async()=>{
-      const newPost=new Newpost({
-        username,
-        userId,
-        postvalue,
-        media:{
-          fileId:uploadStream.id,
-          fileName,
-          contentType:req.file.mimetype
+app.post('/create-post', upload.single('media'), async (req, res) => {
+    try {
+        const { username, firstName, lastName, postvalue, userId } = req.body;
+
+        const newPostData = {
+            username,
+            firstName,
+            lastName,
+            userId,
+            postvalue
+        };
+
+        if (req.file) {
+            const fileName = `${Date.now()}-${req.file.originalname}`;
+            const bucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, { 
+                bucketName: 'uploads' 
+            });
+            const uploadStream = bucket.openUploadStream(fileName, { 
+                contentType: req.file.mimetype 
+            });
+
+            uploadStream.end(req.file.buffer);
+
+            uploadStream.on('finish', async () => {
+                newPostData.media = {
+                    fileId: uploadStream.id,
+                    fileName,
+                    contentType: req.file.mimetype
+                };
+
+                const newPost = new Newpost(newPostData);
+                await newPost.save();
+                res.status(201).json({ message: 'Post with media created successfully' });
+            });
+        } else {
+            // No media case
+            const newPost = new Newpost(newPostData);
+            await newPost.save();
+            res.status(201).json({ message: 'Post without media created successfully' });
         }
-      })
-      await newPost.save()
-      res.status(201).json({message:'Post created successfully'})
-    })
-  }catch(e){
-    console.error(e)
-    res.status(500).json({error:'Server error'})
-  }
-})
-
-app.get('/get-post',async(req,res)=>{
-    try{
-        const posts=await Newpost.find().sort({_id:-1})
-        res.json(posts)
-        console.log('posts retrieved')
-    }catch(e){
-        console.error('Error ',e)
-        res.status(500).json({error:'Internal server error'})
-
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Server error' });
     }
-})
+});
+app.get('/get-post', async (req, res) => {
+    try {
+        const posts = await Newpost.find()
+            .sort({ createdAt: -1 }) // Sort by creation date (newest first)
+            .populate('userId', 'firstName lastName profilePicture') // Include user details you might need
+            .exec();
+        
+        // Format the response data
+        const formattedPosts = posts.map(post => ({
+            _id: post._id,
+            username: `${post.userId?.firstName || post.firstName} ${post.userId?.lastName || post.lastName}`,
+            firstName: post.userId?.firstName || post.firstName,
+            lastName: post.userId?.lastName || post.lastName,
+            postvalue: post.postvalue,
+            media: post.media,
+            createdAt: post.createdAt,
+            userId: post.userId?._id || post.userId // Fallback to original userId if not populated
+        }));
+
+        res.json(formattedPosts);
+        console.log('Posts retrieved successfully');
+    } catch (e) {
+        console.error('Error retrieving posts:', e);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 app.get('/media/:id',async(req,res)=>{
     try{
