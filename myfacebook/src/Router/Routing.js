@@ -20,7 +20,7 @@ function PageRouting() {
   return (
     <>
       <div className="flex flex-col h-screen">
-        { !isAuthPage && <Header/>}
+        { !isAuthPage && <Header user={currentUser}/>}
         <div className="flex flex-1 overflow-hidden">
           {!isAuthPage &&<LeftSideBar user={currentUser} />}
           <div className="flex-1 overflow-y-auto bg-gray-100 p-4">
@@ -28,7 +28,7 @@ function PageRouting() {
               <Route path="/" element={<SigninPage setCurrentUser={setCurrentUser} />} />
               <Route path="/home" element={<HomePage user={currentUser} />} />
               <Route path="/registration" element={<RegistrationPage/>} />
-              <Route path="/profile" element={<ProfilePage/>} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
               <Route path="/setting" element={<SettingsPage/>} />
               <Route path="/reels" element={<ReelsPage/>} />
               <Route path="/friends" element={<FriendsPage/>} />

@@ -3,7 +3,7 @@ import { FaFacebook, FaHome, FaVideo, FaUserFriends, FaBell, FaUserCircle } from
 import { useNavigate } from 'react-router-dom';
 import ProfileDropDown from './ProfileDropdown';
 
-export default function Header() {
+export default function Header({user}) {
   const navigate=useNavigate()
   return (
     <header className="flex items-center justify-between p-2 bg-white shadow-md sticky top-0 z-50">
@@ -20,7 +20,7 @@ export default function Header() {
       <div className="flex space-x-8 text-2xl">
         <FaBell className="cursor-pointer" onClick={()=> navigate('/notification')} />
         {/* <FaUserCircle className="cursor-pointer" onClick={()=> navigate('/profile')} /> */}
-        <ProfileDropDown/>
+        <ProfileDropDown user={user}/>
       </div>
     </header>
   );

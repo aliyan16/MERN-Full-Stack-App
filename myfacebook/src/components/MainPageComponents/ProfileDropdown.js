@@ -5,7 +5,7 @@ import { FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 
 
-function ProfileDropDown(){
+function ProfileDropDown({user}){
     const [isOpen,setIsOpen]=useState(false)
     const dropdownRef=useRef(null)
     const navigate=useNavigate()
@@ -29,7 +29,7 @@ function ProfileDropDown(){
             </button>
             {isOpen &&(
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50" >
-                    <button onClick={()=>{ navigate('/profile'); setIsOpen(false);} }className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" >
+                    <button onClick={()=>{ navigate(`/profile/${user._id}`); setIsOpen(false);} }className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" >
                         <FaUserCircle className="mr-2" />
                         Profile
 
