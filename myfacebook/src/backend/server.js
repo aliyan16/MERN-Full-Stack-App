@@ -137,7 +137,7 @@ app.post('/create-post',upload.single('media'),async(req,res)=>{
     const {username,postvalue,userId}=req.body
     if(!req.file){return res.status(400).json({error:'No file uploaded'})}
     const fileName=`${Date.now()}-${req.file.originalname}`
-    const bucket=mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
+    const bucket=new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
     const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
     uploadStream.end(req.file.buffer)
     uploadStream.on('finish',async()=>{
@@ -330,7 +330,7 @@ app.post('/update-profile-pic/:userId',upload.single('media'),async(req,res)=>{
     const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
     uploadStream.end(req.file.buffer)
     uploadStream.on('finish',async()=>{
-      await RegisterAccount.findByIdAndUpdate(user,{
+      await RegisterAccount.findByIdAndUpdate(userId,{
         profilePic:{
           fileId:uploadStream.id,
           fileName,
@@ -355,6 +355,51 @@ app.get('/get-user-posts/:userId',async(req,res)=>{
   }
 })
 
+app.post('/update-cover-pic/:userId',upload.single('media'),async(req,res)=>{
+  try{
+    const {userId}=req.body.params
+    if (!req.file){return res.status(400).json({error:'No file uploaded'})}
+
+    const fileName=`${Date.now()}-${req.file.originalname}`
+    const bucket= new mongoose.mongo.GridFSBucket(mongoose.connection.db,{bucketName:'uploads'})
+    const uploadStream=bucket.openUploadStream(fileName,{contentType:req.file.mimetype})
+    uploadStream.end(req.file.buffer)
+    uploadStream.on('finish',async()=>{
+      await RegisterAccount.findById(userId,{
+        coverPic:{
+          fileId:uploadStream.id,
+          fileName,
+          contentType:req.file.mimetype
+        }
+      })
+      res.json({message:' cover photo updated successfully '})
+    })
+  }catch(e){
+    console.error(e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
+
+app.get('/get-users',async(req,res)=>{
+  try{
+    const users=await RegisterAccount.find({},'firstName lastName')
+    res.json(users)
+  }catch(e){
+    console.error('Error fetching users ',e)
+    res.status(500).json({error:'server error'})
+  }
+})
+
+app.get('/get-user-images/:userId',async(req,res)=>{
+  try{
+    const images=await Newpost.find({userId:req.params.userId,'media.contentype':{$regex:'^image'}})
+    res.json(images)
+  }catch(e){
+    console.error('error fetching user images ',e)
+    res.status(500).json({error:'Server error'})
+  }
+})
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
