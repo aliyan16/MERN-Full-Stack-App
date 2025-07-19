@@ -241,15 +241,15 @@ app.use('/signin',async (req,res)=>{
   }
 })
 
-app.use('/get-users',async (req,res)=>{
-  try{
-    const users=await RegisterAccount.find({},'firstName lastName')
-    res.json(users)
-  }catch(e){
-    console.error('Error fetching users',e)
-    res.status(500).json({error:'Server error'})
-  }
-})
+// app.use('/get-users',async (req,res)=>{
+//   try{
+//     const users=await RegisterAccount.find({},'firstName lastName')
+//     res.json(users)
+//   }catch(e){
+//     console.error('Error fetching users',e)
+//     res.status(500).json({error:'Server error'})
+//   }
+// })
 
 app.use('/upload-story',upload.single('media'),async(req,res)=>{
   try{
@@ -398,6 +398,17 @@ app.get('/get-user-images/:userId',async(req,res)=>{
   }catch(e){
     console.error('error fetching user images ',e)
     res.status(500).json({error:'Server error'})
+  }
+})
+
+app.get('/get-user-profile/:userId',async(req,res)=>{
+  try{
+    const user=await RegisterAccount.findById(req.params.userId,'profilepic coverPic')
+    if(!user) {return res.status(404).json({error:' User not found'})}
+    res.json(user)
+  }catch(e){
+    console.error('Error fetching user profile ',e)
+    res.status(500).json({error:"Server error"})
   }
 })
 
