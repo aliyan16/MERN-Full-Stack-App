@@ -11,8 +11,19 @@ const RegisterAccountSchema=new mongoose.Schema({
     },
     gender:{type:String,required:true},
     emailOrMobile:{type:String,required:true,unique:true},
-    password:{type:String,required:true}
-},{
+    password:{type:String,required:true},
+    profilePic:{
+        fileId:mongoose.Schema.Types.ObjectId,
+        fileName:String,
+        contentType:String
+    },
+    coverPic:{
+        fileId:mongoose.Schema.Types.ObjectId,
+        fileName:String,
+        contentType:String
+    }
+}
+,{
     timestamps:true,
 }
 )
