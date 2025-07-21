@@ -23,7 +23,7 @@ function NewPostComponent({ onPostSubmit, user }) {
           PostData.append('firstName', user.firstName);
           PostData.append('lastName', user.lastName);
           PostData.append('postvalue', post);
-          PostData.append('userId', user.id);
+          PostData.append('userId', user._id);
           
           if (file) {
               PostData.append('media', file);

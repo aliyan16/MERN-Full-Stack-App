@@ -21,6 +21,7 @@ function SigninPage({setCurrentUser}){
         try {
             const res = await axios.post('http://localhost:5000/signin', SigninData);
             alert(res.data.message);
+            console.log("User data from backend:", res.data.user);
             
             // Store the complete user object
             setCurrentUser(res.data.user);

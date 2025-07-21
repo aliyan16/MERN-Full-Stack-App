@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
     username: String,
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to User model
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'RegisterAccount' }, // Reference to User model
     firstName: String,
     lastName: String,
     postvalue: String,
