@@ -28,10 +28,12 @@ function HomePage({ user }) {
             {posts.map((post, index) => (
                 <Posts 
                     key={index} 
+                    userId={user._id}
                     username={`${post.firstName} ${post.lastName}`} 
                     content={post.postvalue} 
                     media={post.media} 
                     id={post._id}
+                    profilePic={post.profilePic}
                 />
             ))}
         </div>

@@ -24,7 +24,12 @@ function ProfileDropDown({user}){
         <>
         <div className="relative" ref={dropdownRef} >
             <button className="flex items-center focus:outline-none" onClick={()=>setIsOpen(!isOpen)} >
-                <FaUserCircle className="text-2xl cursor-pointer hover:text-gray-600" />
+                {user?.profilePic?.fileId?(
+                    <img src={`http://localhost:5000/media/${user.profilePic.fileId}`} alt="Profile" 
+                        className="w-8 h-8 rounded-full object-cover cursor-pointer" />
+                ):(
+                    <FaUserCircle className="text-2xl cursor-pointer hover:text-gray-600" />
+                )}
 
             </button>
             {isOpen &&(
