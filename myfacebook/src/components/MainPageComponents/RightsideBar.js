@@ -26,7 +26,12 @@ function RightSideBar(){
                 {users.map(user => (
 
                     <div key={user._id} className="mb-2 flex space-x-2">
-                        <FaUser />
+                        {user.profilePic?(
+                            <img src={`http://localhost:5000/media/${user.profilePic.fileId}`} alt="ProfilePic" 
+                            className="w-8 h-8 rounded-full object-cover cursor-pointer" />
+                        ):(
+                            <FaUser/>
+                        )}
                         <span>{user.firstName} {user.lastName}</span>
                     </div>
                 ))}
