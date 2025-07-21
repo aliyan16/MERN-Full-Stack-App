@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { FaUserCircle } from 'react-icons/fa';
 
 const FriendsSection = () => {
   const [friends, setFriends] = useState([]);
@@ -17,7 +18,14 @@ const FriendsSection = () => {
       <div className="grid grid-cols-4 gap-2 mt-2">
         {friends.map((friend, index) => (
           <div key={index} className="text-center">
-            <div className="w-12 h-12 bg-gray-200 rounded-full mx-auto"></div>
+            <div className="w-12 h-12  rounded-full mx-auto">
+              {friend?.profilePic?(
+                    <img src={`http://localhost:5000/media/${friend.profilePic.fileId}`} alt="Profile" 
+                        className="w-12 h-12 rounded-full object-cover cursor-pointer" />
+                ):(
+                    <FaUserCircle className="text-2xl cursor-pointer hover:text-gray-600" />
+                )}
+            </div>
             <p className="text-xs mt-1">{friend.firstName} {friend.lastName}</p>
           </div>
         ))}

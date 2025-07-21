@@ -394,7 +394,7 @@ app.post('/update-profile-pic/:userId',upload.single('media'),async(req,res)=>{
 
 app.get('/get-user-posts/:userId',async(req,res)=>{
   try{
-    const posts=await Newpost.find({userId:req.params.userId}).sort({_id:-1}.populate('firstName lastName profilePic').exec())
+    const posts=await Newpost.find({userId:req.params.userId}).sort({_id:-1}).populate('userId','firstName lastName profilePic').exec()
     const formattedPosts = posts.map(post => ({
             _id: post._id,
             username: `${post.userId?.firstName || post.firstName} ${post.userId?.lastName || post.lastName}`,
@@ -407,7 +407,7 @@ app.get('/get-user-posts/:userId',async(req,res)=>{
             userId: post.userId?._id || post.userId // Fallback to original userId if not populated
         }));
 
-    res.json(posts)
+    res.json(formattedPosts)
   }catch(e){
     console.error('Error fetching user posts ',e)
     res.status(500).json({error:'Server error'})
@@ -442,7 +442,7 @@ app.post('/update-cover-pic/:userId',upload.single('media'),async(req,res)=>{
 
 app.get('/get-users',async(req,res)=>{
   try{
-    const users=await RegisterAccount.find({},'firstName lastName')
+    const users=await RegisterAccount.find({},'firstName lastName profilePic')
     res.json(users)
   }catch(e){
     console.error('Error fetching users ',e)
