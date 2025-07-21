@@ -7,7 +7,7 @@ function Posts({ username, content, media, id, profilePic }) {
             <div className="flex space-x-2 items-center">
                 {profilePic?.fileId ? (
                     <img 
-                        src={`http://localhost:5000/media/${profilePic.fileId}`} 
+                        src={`http://localhost:5000/media/${profilePic.fileId || profilePic}`} 
                         alt="Profile" 
                         className="w-10 h-10 rounded-full object-cover"
                     />

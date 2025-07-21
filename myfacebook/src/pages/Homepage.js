@@ -12,6 +12,7 @@ function HomePage({ user }) {
             const response = await axios.get('http://localhost:5000/get-post');
             setPosts(response.data);
             console.log('post data fetched');
+            console.log(posts.profilePic)
         } catch (e) {
             console.error('Error fetching posts ', e);
         }
@@ -28,7 +29,7 @@ function HomePage({ user }) {
             {posts.map((post, index) => (
                 <Posts 
                     key={index} 
-                    userId={user._id}
+                    userId={post.userId}
                     username={`${post.firstName} ${post.lastName}`} 
                     content={post.postvalue} 
                     media={post.media} 
