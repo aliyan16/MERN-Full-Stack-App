@@ -394,7 +394,19 @@ app.post('/update-profile-pic/:userId',upload.single('media'),async(req,res)=>{
 
 app.get('/get-user-posts/:userId',async(req,res)=>{
   try{
-    const posts=await Newpost.find({userId:req.params.userId}).sort({_id:-1})
+    const posts=await Newpost.find({userId:req.params.userId}).sort({_id:-1}.populate('firstName lastName profilePic').exec())
+    const formattedPosts = posts.map(post => ({
+            _id: post._id,
+            username: `${post.userId?.firstName || post.firstName} ${post.userId?.lastName || post.lastName}`,
+            firstName: post.userId?.firstName || post.firstName,
+            lastName: post.userId?.lastName || post.lastName,
+            postvalue: post.postvalue,
+            media: post.media,
+            profilePic: post.userId?.profilePic || null,
+            createdAt: post.createdAt,
+            userId: post.userId?._id || post.userId // Fallback to original userId if not populated
+        }));
+
     res.json(posts)
   }catch(e){
     console.error('Error fetching user posts ',e)

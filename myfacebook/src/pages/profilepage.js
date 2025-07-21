@@ -4,6 +4,7 @@ import FriendsSection from '../components/profilePageComponents/friendsSection';
 import ImagesSection from '../components/profilePageComponents/profileImages';
 import Posts from '../components/PostComponents/Posts';
 import { useParams } from 'react-router-dom';
+import UserPosts from '../components/profilePageComponents/userPosts';
 
 
 const ProfilePage = ({ user }) => {
@@ -19,7 +20,7 @@ const ProfilePage = ({ user }) => {
         </div>
 
         <div className="md:col-span-2 space-y-4">
-          <Posts userId={userId} />
+          <UserPosts userId={userId} />
         </div>
       </div>
     </div>
