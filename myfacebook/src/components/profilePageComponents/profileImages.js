@@ -17,7 +17,7 @@ const ImagesSection = ({ userId }) => {
         {images.map((img, index) => (
           <img
             key={index}
-            src={`http://localhost:5000/media/${img.media.fileId}`}
+            src={`http://localhost:5000/media/${img.fileId}`}
             alt="User Upload"
             className="w-full h-20 object-cover rounded"
           />

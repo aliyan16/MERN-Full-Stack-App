@@ -452,8 +452,41 @@ app.get('/get-users',async(req,res)=>{
 
 app.get('/get-user-images/:userId',async(req,res)=>{
   try{
-    const images=await Newpost.find({userId:req.params.userId,'media.contentype':{$regex:'^image'}})
-    res.json(images)
+    // const images=await Newpost.find({userId:req.params.userId,'media.contentype':{$regex:'^image'}})
+    const userId=req.params.userId
+    const user=await RegisterAccount.findById(userId)
+    const postsWithImages=await Newpost.find({
+      userId:userId,
+      'media.contentType':{$regex:/^image/}
+    })
+    const allImages=[]
+    if(user.profilePic?.contentType?.startsWith('image/')){
+      allImages.push({
+        ...user.profilePic,
+        type:'profile',
+        date:user.createdAt
+      })
+    }
+    if(user.coverPic?.contentType?.startsWith('image/')){
+      allImages.push({
+        ...user.coverPic,
+        type:'cover',
+        date:user.createdAt
+      })
+    }
+    postsWithImages.forEach(post=>{
+      if(post.media?.contentType?.startsWith('image/')){
+        allImages.push({
+          ...post.media,
+          type:'post',
+          date:post.createdAt
+        })
+      }
+    })
+    allImages.sort((a,b)=>b.date-a.date)
+
+
+    res.json(allImages)
   }catch(e){
     console.error('error fetching user images ',e)
     res.status(500).json({error:'Server error'})
