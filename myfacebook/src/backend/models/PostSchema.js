@@ -1,3 +1,4 @@
+const { type } = require('@testing-library/user-event/dist/type');
 const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
@@ -11,7 +12,13 @@ const PostSchema = new mongoose.Schema({
         fileName: String,
         contentType: String
     },
-    createdAt: { type: Date, default: Date.now } // Optional: add timestamp
+    likes:[{type:mongoose.Schema.Types.ObjectId,ref:'RegisterAccount'}],
+    comments:[{
+        userId:{type:mongoose.Schema.Types.ObjectId,ref:'RegisterAccount'},
+        text:String,
+        createdAt:{type:Date,default:Date.now}
+    }],
+    createdAt: { type: Date, default: Date.now } 
 });
 
 module.exports = mongoose.model('Newpost', PostSchema);

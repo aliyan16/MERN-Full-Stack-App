@@ -14,7 +14,8 @@ const bcrypt=require('bcrypt');
 const RegisterAccount = require('./models/RegisterSchema');
 const { error } = require('console');
 
-const Story=require('./models/StorySchema')
+const Story=require('./models/StorySchema');
+const { comment } = require('postcss');
 
 const app=express()
 const port=5000;
@@ -507,6 +508,52 @@ app.get('/get-user-profile/:userId',async(req,res)=>{
     res.status(500).json({error:"Server error"})
   }
 })
+
+app.post('/like-post',async(req,res)=>{
+  try{
+    const {postId,userId}=req.body
+    const post=await Newpost.findById(postId)
+    if(!post){
+      return res.status(404).json({error:'Post not found'})
+    }
+    const likeIndex=post.likes.indexOf(userId)
+    if(likeIndex===-1){
+      post.likes.push(userId)
+    }else{
+      post.likes.splice(likeIndex,1)
+    }
+    await post.save()
+    res.json({likes:post.likes.length})
+  }catch(e){
+    console.error(e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
+app.post('/add-comment',async(req,res)=>{
+  try{
+    const {postId,userId,text}=req.body
+    const post=await Newpost.findById(postId)
+    if(!post){
+      return res.status(404).json({error:'Post not found'})
+    }
+    post.comments.push({userId,text})
+    await post.save()
+    const newComment=post.comments[post.comments.length-1]
+    await Newpost.populate(newComment,{path:'userId',select:'firstName lastName profilePic'})
+    res.json({
+      comment:{
+        ...newComment.toObject(),
+        username:`${newComment.userId.firstName} ${newComment.userId.lastName}`,
+        profilePic:newComment.userId.profilePic
+      }
+    })
+  }catch(e){
+    console.error(e)
+    res.status(500).json({error:'Server error'})
+  }
+})
+
 
 app.listen(port,()=>{
     console.log(`Server running on port ${port}`)
