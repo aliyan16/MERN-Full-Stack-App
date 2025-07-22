@@ -76,25 +76,24 @@ function NewPostComponent({ onPostSubmit, user }) {
                     </div>
                 )}
                 <hr/>
-                <div className='flex justify-between'>
-                    <label className='p-4 pl-16 cursor-pointer'>
+                <div className='flex justify-between items-center px-4 py-2'>
+                    <label className='flex-1 text-center cursor-pointer'>
                         Live video
-                        <input className='p-4 pl-16 align-middle' />
+                        <input className='hidden' />
                     </label>
-                    <label className='p-4 pl-16 cursor-pointer'>
+                    <label className='flex-1 text-center cursor-pointer'>
                         Image/Video
                         <input 
                             type='file' 
                             accept='image/*,video/*' 
-                            hidden 
-                            onChange={handleFileChange}  
-                            className='p-4 align-middle'
+                            className='hidden'
+                            onChange={handleFileChange}
                         />
                     </label>
                     <button 
-                        className='p-4 pr-16' 
+                        className='flex-1 text-center disabled:opacity-50' 
                         onClick={handlePost}
-                        disabled={!post.trim() && !file} // Disable if both empty
+                        disabled={!post.trim() && !file}
                     >
                         Post
                     </button>

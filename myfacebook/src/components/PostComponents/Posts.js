@@ -56,17 +56,25 @@ function Posts({ username, content, media, id, profilePic,likes,comments,current
             </div>
             <p className="mt-2">{content}</p>
             {media && media.fileId && media.contentType && (
-                media.contentType.startsWith('video') ? (
-                    <video controls className="max-w-full rounded mt-2">
-                        <source src={`http://localhost:5000/media/${media.fileId}`} type={media.contentType} />
-                    </video>
-                ) : (
-                    <img 
-                        src={`http://localhost:5000/media/${media.fileId}`} 
-                        alt="post" 
-                        className="max-w-full rounded mt-2" 
-                    />
-                )
+                <div className="w-full h-full overflow-hidden rounded mt-2"> {/* Fixed size container */}
+                    {media.contentType.startsWith('video') ? (
+                        <video 
+                            controls 
+                            className="w-full h-full object-cover"
+                        >
+                            <source 
+                                src={`http://localhost:5000/media/${media.fileId}`} 
+                                type={media.contentType} 
+                            />
+                        </video>
+                    ) : (
+                        <img 
+                            src={`http://localhost:5000/media/${media.fileId}`} 
+                            alt="post" 
+                            className="w-full h-full object-cover" 
+                        />
+                    )}
+                </div>
             )}
             {/* Like and Comment Section */}
             <div className="mt-3 flex justify-between border-t pt-2">

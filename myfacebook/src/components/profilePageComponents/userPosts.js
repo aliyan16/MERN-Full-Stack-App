@@ -15,7 +15,7 @@ function UserPosts(){
     return(
         <div className="space-y-4">
             {posts.map(post=>(
-                <Posts key={post._id} username={`${post.firstName} ${post.lastName}`} content={post.postvalue} media={post.media} profilePic={post.profilePic} />
+                <Posts key={post._id} username={`${post.firstName} ${post.lastName}`} content={post.postvalue} media={post.media} id={post._id} profilePic={post.profilePic} likes={post.likes} comments={post.comments} currentUserId={userId} />
             ))}
 
         </div>
