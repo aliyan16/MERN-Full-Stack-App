@@ -35,6 +35,9 @@ function HomePage({ user }) {
                     media={post.media} 
                     id={post._id}
                     profilePic={post.profilePic}
+                    likes={post.likes}
+                    comments={post.comments}
+                    currentUserId={user._id}
                 />
             ))}
         </div>

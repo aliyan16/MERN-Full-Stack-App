@@ -183,6 +183,8 @@ app.get('/get-post', async (req, res) => {
         const posts = await Newpost.find()
             .sort({ createdAt: -1 }) // Sort by creation date (newest first)
             .populate('userId', 'firstName lastName profilePic') // Include user details you might need
+            .populate('likes','firstName lastName')
+            .populate('comments.userId','firstName lastName profilePic')
             .exec();
         
         // Format the response data
@@ -194,6 +196,14 @@ app.get('/get-post', async (req, res) => {
             postvalue: post.postvalue,
             media: post.media,
             profilePic: post.userId?.profilePic || null,
+            likes:post.likes.map(like=>like._id),
+            comments:post.comments.map(comment=>({
+              userId:comment.userId,
+              username:`${comment.userId?.firstName} ${comment.userId?.lastName}`,
+              text:comment.text,
+              profilePic:comment.userId?.profilePic,
+              createdAt:comment.createdAt
+            })),
             createdAt: post.createdAt,
             userId: post.userId?._id || post.userId 
         }));
