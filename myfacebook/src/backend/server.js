@@ -194,7 +194,7 @@ app.get('/get-post', async (req, res) => {
             media: post.media,
             profilePic: post.userId?.profilePic || null,
             createdAt: post.createdAt,
-            userId: post.userId?._id || post.userId // Fallback to original userId if not populated
+            userId: post.userId?._id || post.userId 
         }));
 
         res.json(formattedPosts);
