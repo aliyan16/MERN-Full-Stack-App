@@ -1,70 +1,103 @@
-# Getting Started with Create React App
+# MyFacebook - MERN Full Stack Social Media App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+MyFacebook is a full-stack social media web application inspired by Facebook, built with the MERN stack (MongoDB, Express.js, React, Node.js). It allows users to register, sign in, create posts (with images/videos), view stories, manage their profile, and interact with other users.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication**: Register and sign in using email or mobile number and password.
+- **Profile Management**: Update profile and cover pictures, view your posts and images.
+- **News Feed**: View all users' posts, including text, images, and videos.
+- **Create Posts**: Share text, images, or videos with other users.
+- **Stories**: Upload and view temporary stories (images/videos).
+- **Reels**: Watch short video content uploaded by users.
+- **Friends List**: Browse all registered users.
+- **Comments & Likes**: Interact with posts by liking and commenting.
+- **Notifications & Settings**: Placeholder pages for future notification and settings features.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React, React Router, Axios, Tailwind CSS
+- **Backend**: Node.js, Express.js, MongoDB, Mongoose, Multer, GridFS
+- **Authentication**: Passwords hashed with bcrypt
+- **Media Storage**: Images and videos stored in MongoDB using GridFS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
+- Node.js and npm installed
+- MongoDB Atlas account (or local MongoDB instance)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd myfacebook
+   ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Configure MongoDB:**
+   - Update the `mongoURL` in `src/backend/server.js` with your MongoDB connection string if needed.
 
-### `npm run build`
+4. **Start the backend server:**
+   ```bash
+   node src/backend/server.js
+   ```
+   The backend will run on [http://localhost:5000](http://localhost:5000).
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5. **Start the frontend React app:**
+   ```bash
+   npm start
+   ```
+   The frontend will run on [http://localhost:3000](http://localhost:3000).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+myfacebook/
+  ├── src/
+  │   ├── backend/         # Express server, models, and API routes
+  │   ├── components/      # React components (Posts, Stories, Profile, etc.)
+  │   ├── pages/           # Main pages (Home, Profile, Signin, Registration, etc.)
+  │   ├── Router/          # React Router setup
+  │   └── index.js         # React entry point
+  ├── public/              # Static assets
+  ├── package.json         # Project metadata and dependencies
+  └── README.md            # Project documentation
+```
 
-### `npm run eject`
+## API Endpoints (Backend)
+- `POST /register` - Register a new user
+- `POST /signin` - User login
+- `POST /create-post` - Create a new post (with optional media)
+- `GET /get-post` - Get all posts
+- `GET /get-user-posts/:userId` - Get posts by a specific user
+- `POST /upload-story` - Upload a new story
+- `GET /get-stories` - Get all stories
+- `GET /get-users` - Get all users
+- `POST /update-profile-pic/:userId` - Update profile picture
+- `POST /update-cover-pic/:userId` - Update cover photo
+- `GET /media/:id` - Get media file (image/video)
+- `GET /get-videos` - Get all video posts
+- `POST /like-post` - Like/unlike a post
+- `POST /add-comment` - Add a comment to a post
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
+- **Sign Up**: Create a new account with your details.
+- **Sign In**: Log in to access your feed and features.
+- **Create Post**: Share text, images, or videos from the homepage.
+- **Stories**: Upload and view stories from the homepage.
+- **Profile**: View and update your profile, see your posts and images.
+- **Friends**: Browse all users from the friends page.
+- **Reels**: Watch short videos uploaded by users.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Customization
+- Update MongoDB connection string in `src/backend/server.js` as needed.
+- Tailwind CSS is used for styling; customize in `tailwind.config.js` and `index.css`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## License
+This project is licensed under the ISC License.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+Inspired by Facebook. Built for learning and demonstration purposes.
